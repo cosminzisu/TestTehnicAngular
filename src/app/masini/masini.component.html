@@ -1,0 +1,85 @@
+<h2>Mașini</h2>
+<input type="text" class="search-input" [(ngModel)]="searchText" placeholder="Caută...">
+<table>
+  <thead>
+    <tr>
+      <th>Număr curent</th>
+      <th>Denumire marcă</th>
+      <th>Denumire model</th>
+      <th>Anul fabricației</th>
+      <th>Capacitatea cilindrică</th>
+      <th>Taxa de impozit</th>
+      <th>Acțiuni</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let masina of masini | filter: searchText">
+        <td>{{ masina.id }}</td>
+        <td>{{ masina.Marca }}</td>
+        <td>{{ masina.Model }}</td>
+        <td>{{ masina.An}}</td>
+        <td>{{ masina.CC }}</td>
+        <td>{{ masina.Taxa}}</td>
+        <td>
+          <button class="btn-edit" (click)="deschideModal(masina)">Editează</button>
+          <button class="btn-delete" (click)="deleteMasina(masina.id)">Ștergere</button>
+        </td>
+      </tr>
+  </tbody>
+</table>
+<button class="btn-add" (click)="deschideFormularAdaugare()">Adaugă masina (+)</button>
+
+<!-- Modal pentru editarea unei persoane -->
+<div class="form-container" *ngIf="masinaSelectata"  #formularEditare>
+  <div class="modal-content">
+    <h2>Modifică persoană</h2>
+    
+    <form (ngSubmit)="actualizeazaMasina()">
+      <label for="marca">Marca:</label>
+      <input type="text" id="marca" name="marca" [(ngModel)]="masinaSelectata.Marca" required maxlength="255">
+
+      <label for="model">Model:</label>
+      <input type="text" id="model" name="model" [(ngModel)]="masinaSelectata.Model" required maxlength="255">
+
+      <label for="an">An:</label>
+      <input type="number" id="an" name="an" [(ngModel)]="masinaSelectata.An" required  maxlength="13">
+    
+      <label for="cc">Capacitate Cilindrica:</label>
+      <input type="number" id="cc" name="cc" [(ngModel)]="masinaSelectata.CC" required>
+
+      <label for="taxa">Taxa impozit:</label>
+      <input type="number" id="taxa" name="taxa" [(ngModel)]="masinaSelectata.Taxa" readonly>
+      <p>*taxa se va actualiza automat dupa salvarea modificarii</p>
+
+      <button class="btn-save" type="submit">Actualizează</button>
+      <button class="btn-cancel" (click)="inchideModal()">Anulează</button>
+    </form>
+  </div>
+</div>
+<div>
+  
+ <!-- modal pentru adaugarea unei persoane -->
+ <div *ngIf="afiseazaFormular" class="form-container">
+  <h2>Adaugă masina</h2>
+   <form (ngSubmit)="adaugaMasina()">
+
+     <span *ngIf="!marcaNou" class="error-msg">Marca este obligatorie!</span><br>
+     <input type="text" id="marca" name="marca" [(ngModel)]="marcaNou" required placeholder="Marca" maxlength="255">
+
+     <span *ngIf="!modelNou" class="error-msg">Modelul este obligatoriu!</span><br>
+     <input type="text" id="model" name="model" [(ngModel)]="modelNou" required placeholder="Model" maxlength="255">
+     
+     <span *ngIf="!anNou" class="error-msg">Anul este obligatoriu</span><br>
+     <input type="text" id="an" name="an" [(ngModel)]="anNou" required placeholder="An" maxlength="13">
+
+     <span *ngIf="!ccNou" class="error-msg">Capacitatea Cilindrica este obligatorie</span><br>
+     <input type="text" id="cc" name="cc" [(ngModel)]="ccNou" required placeholder="CC" maxlength="13">
+
+     <input type="text" id="taxa" name="taxa" [(ngModel)]="taxaNou" required placeholder="Taxa" maxlength="13" readonly>
+     <p>*taxa se va completa automat</p>
+     <!-- <input type="number" id="varsta" name="varsta" [(ngModel)]="varstaNoua" readonly placeholder="Varsta"> -->
+ 
+     <button class="btn-save" type="submit">Adaugă</button>
+     <button class="btn-cancel" class="btn-cancel" type="button" (click)="anuleazaAdaugare()">Anulează</button>
+   </form>
+ </div>
